@@ -1,6 +1,7 @@
 var taskIdCounter = 0;
 var formEl = document.querySelector("#task-form");
 var tasksToDoEl = document.querySelector("#tasks-to-do");
+var pageContentEl = document.querySelector("#page-content");
 
 var taskFormHandler = function (event) {
     //prevents browser from refreshing
@@ -52,8 +53,10 @@ var createTaskEl = function (taskDataObj) {
     //add div to li
     listItemEl.appendChild(taskInfoEl);
 
+    //variable to call function to create buttons and dropdown
     var taskActionsEl = createTaskActions(taskIdCounter);
     
+    //add buttons and dropdown to list item
     listItemEl.appendChild(taskActionsEl);
 
     //add entire list item to list 
@@ -83,6 +86,7 @@ var createTaskActions = function (taskId) {
 
     actionContainerEl.appendChild(deleteButtonEl);
 
+    //create select dropdown
     var statusSelectEl = document.createElement("select");
     statusSelectEl.className = "select-status";
     statusSelectEl.setAttribute("name", "status-change");
@@ -112,7 +116,23 @@ var createTaskActions = function (taskId) {
     return actionContainerEl;
 };
 
+var taskButtonHandler = function (event) {
+
+    if (event.target.matches(".delete-btn")) {
+        //get the element's task id
+        var taskId = event.target.getAttribute("data-task-id");
+        deleteTask(taskId);
+    }
+};
+
+var deleteTask = function (taskId) {
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+    taskSelected.remove();
+}
+
 //submit event listens for both click and enter key to submit a form 
 formEl.addEventListener("submit", taskFormHandler);
+
+pageContentEl.addEventListener("click", taskButtonHandler);
 
 
